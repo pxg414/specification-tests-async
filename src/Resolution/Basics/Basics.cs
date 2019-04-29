@@ -55,8 +55,8 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedType()
         {
             // Arrange
-            Container.RegisterType<IFoo, Foo>()
-                     .RegisterType<IFoo, Foo1>(Name);
+            await Container.RegisterType<IFoo, Foo>();
+            await Container.RegisterType<IFoo, Foo1>(Name);
 
             // Act / Validate
             Assert.IsInstanceOfType(await Container.Resolve<IFoo>(), typeof(Foo));
@@ -67,8 +67,8 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedInstance()
         {
             // Arrange
-            Container.RegisterInstance<IFoo>(new Foo())
-                     .RegisterInstance<IFoo>(Name, new Foo1());
+            await Container.RegisterInstance<IFoo>(new Foo());
+            await Container.RegisterInstance<IFoo>(Name, new Foo1());
 
             // Act / Validate
             Assert.IsInstanceOfType(await Container.Resolve<IFoo>(), typeof(Foo));
@@ -79,8 +79,8 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedFactory()
         {
             // Arrange
-            Container.RegisterFactory<IFoo>((c,t,n) => new Foo())
-                     .RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
+            await Container.RegisterFactory<IFoo>((c, t, n) => new Foo());
+            await Container.RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
 
             // Act / Validate
             Assert.IsInstanceOfType(await Container.Resolve<IFoo>(), typeof(Foo));
@@ -93,8 +93,8 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedTypeNegative()
         {
             // Arrange
-            Container.RegisterType<IFoo, Foo>()
-                     .RegisterType<IFoo, Foo1>(Name);
+            await Container.RegisterType<IFoo, Foo>();
+            await Container.RegisterType<IFoo, Foo1>(Name);
 
             // Act / Validate
             await Container.Resolve<IFoo>("none");
@@ -105,8 +105,8 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedInstanceNegative()
         {
             // Arrange
-            Container.RegisterInstance<IFoo>(new Foo())
-                     .RegisterInstance<IFoo>(Name, new Foo1());
+            await Container.RegisterInstance<IFoo>(new Foo());
+            await Container.RegisterInstance<IFoo>(Name, new Foo1());
 
             // Act / Validate
             await Container.Resolve<IFoo>("none");
@@ -117,8 +117,8 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedFactoryNegative()
         {
             // Arrange
-            Container.RegisterFactory<IFoo>((c, t, n) => new Foo())
-                     .RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
+            await Container.RegisterFactory<IFoo>((c, t, n) => new Foo());
+            await Container.RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
 
             // Act / Validate
             await Container.Resolve<IFoo>("none");
