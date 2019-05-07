@@ -13,5 +13,9 @@ namespace Unity.Specification.Async.Registration.Factory
 
     #region Test Data
 
+    public interface IService { }
+
+    public class Service : IService { }
+
     #endregion
 }

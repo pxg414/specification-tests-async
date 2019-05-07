@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Unity.Specification.Async;
 
-namespace Unity.Specification.Async.Registration.Instance
+namespace Unity.Specification.Diagnostic.Async.Registration.Factory
 {
     public abstract partial class SpecificationTests : TestFixtureBase
     {
@@ -18,4 +19,5 @@ namespace Unity.Specification.Async.Registration.Instance
     public class Service : IService { }
 
     #endregion
+
 }

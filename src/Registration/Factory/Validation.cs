@@ -1,28 +1,28 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Unity.Specification.Async.Registration.Factory
 {
     public abstract partial class SpecificationTests
     {
+        [Ignore]
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Null_Null()
+        public async Task Null_Null_Null_Async()
         {
             // Act
-            Container.RegisterFactory(null, null, null, null);
+            await Container.RegisterFactory(null, null, null, null);
         }
 
+        [Ignore]
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Empty_Null()
+        public async Task Empty_Null_Null_Async()
         {
             // Act
-            Container.RegisterFactory(Enumerable.Empty<Type>(), null, null, null);
+            await Container.RegisterFactory(Enumerable.Empty<Type>(), null, null, null);
         }
     }
 }

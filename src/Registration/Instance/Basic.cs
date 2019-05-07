@@ -6,8 +6,9 @@ namespace Unity.Specification.Async.Registration.Instance
 {
     public abstract partial class SpecificationTests
     {
+        [Ignore]
         [TestMethod]
-        public void Null_Object()
+        public void Null_Object_Async()
         {
             var instance = new object();
 
@@ -15,8 +16,9 @@ namespace Unity.Specification.Async.Registration.Instance
             //            Assert.AreEqual(Container.Resolve<string>(), instance);
         }
 
+        [Ignore]
         [TestMethod]
-        public void Empty_Object()
+        public void Empty_Object_Async()
         {
             var instance = new object();
 
@@ -25,7 +27,7 @@ namespace Unity.Specification.Async.Registration.Instance
         }
 
         //[TestMethod]
-        //public void Instance_IUC_NamedObject()
+        //public void Instance_IUC_NamedObject_Async()
         //{
         //    var instance = Guid.NewGuid().ToString();
 
@@ -36,7 +38,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //}
 
         //[TestMethod]
-        //public void Instance_IUC_InterfacedObject()
+        //public void Instance_IUC_InterfacedObject_Async()
         //{
         //    var instance = new Service();
 
@@ -47,7 +49,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //}
 
         //[TestMethod]
-        //public void Instance_SimpleObject()
+        //public void Instance_SimpleObject_Async()
         //{
         //    var instance = Guid.NewGuid().ToString();
 
@@ -57,7 +59,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //}
 
         //[TestMethod]
-        //public void Instance_NamedObject()
+        //public void Instance_NamedObject_Async()
         //{
         //    var instance = Guid.NewGuid().ToString();
 
@@ -68,7 +70,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //}
 
         //[TestMethod]
-        //public void Instance_InterfacedObject()
+        //public void Instance_InterfacedObject_Async()
         //{
         //    var instance = new Service();
 
@@ -79,7 +81,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //}
 
         //[TestMethod]
-        //public void Instance_NamedInterfacedObject()
+        //public void Instance_NamedInterfacedObject_Async()
         //{
         //    var instance = new Service();
         //    var local = Guid.NewGuid().ToString();
@@ -92,7 +94,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //}
 
         //[TestMethod]
-        //public void Instance_ExternallyControlledLifetimeManager()
+        //public void Instance_ExternallyControlledLifetimeManager_Async()
         //{
         //    var instance = Guid.NewGuid().ToString();
 
@@ -102,7 +104,7 @@ namespace Unity.Specification.Async.Registration.Instance
 
 
         //[TestMethod]
-        //public void Instance_ChainRegistrations()
+        //public void Instance_ChainRegistrations_Async()
         //{
         //    var instance = new Service();
 
@@ -113,7 +115,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //}
 
         //[TestMethod]
-        //public void Instance_RegisterWithParentAndChild()
+        //public void Instance_RegisterWithParentAndChild_Async()
         //{
         //    //create unity container
         //    var parent = GetContainer();

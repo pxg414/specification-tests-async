@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Threading.Tasks;
 
 namespace Unity.Specification.Resolution.Basics
@@ -33,7 +34,7 @@ namespace Unity.Specification.Resolution.Basics
         public async Task ContainerResolvesRecursiveConstructorDependencies()
         {
             // Act
-            var dep = await Container.Resolve<ObjectWithOneDependency>();
+            var dep = (ObjectWithOneDependency)await Container.Resolve(typeof(ObjectWithOneDependency));
 
             // Verify
             Assert.IsNotNull(dep);
@@ -45,7 +46,7 @@ namespace Unity.Specification.Resolution.Basics
         public async Task ContainerResolvesMultipleRecursiveConstructorDependencies()
         {
             // Act
-            var dep = await Container.Resolve<ObjectWithTwoConstructorDependencies>();
+            var dep = (ObjectWithTwoConstructorDependencies)await Container.Resolve(typeof(ObjectWithTwoConstructorDependencies));
 
             // Verify
             dep.Validate();
@@ -55,49 +56,52 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedType()
         {
             // Arrange
-            await Container.RegisterType<IFoo, Foo>();
-            await Container.RegisterType<IFoo, Foo1>(Name);
+            ((IUnityContainer)Container).RegisterType<IFoo, Foo>()
+                                        .RegisterType<IFoo, Foo1>(Name);
 
-            // Act / Validate
-            Assert.IsInstanceOfType(await Container.Resolve<IFoo>(), typeof(Foo));
-            Assert.IsInstanceOfType(await Container.Resolve<IFoo>(Name), typeof(Foo1));
+            // Act 
+            var instance1 = await Container.Resolve(typeof(IFoo));
+            var instance2 = await Container.Resolve(typeof(IFoo), Name);
+
+            // Validate
+            Assert.IsInstanceOfType(instance1, typeof(Foo));
+            Assert.IsInstanceOfType(instance2, typeof(Foo1));
         }
 
         [TestMethod]
         public async Task NamedInstance()
         {
             // Arrange
-            await Container.RegisterInstance<IFoo>(new Foo());
-            await Container.RegisterInstance<IFoo>(Name, new Foo1());
+            ((IUnityContainer)Container).RegisterInstance<IFoo>(new Foo())
+                                        .RegisterInstance<IFoo>(Name, new Foo1());
 
             // Act / Validate
-            Assert.IsInstanceOfType(await Container.Resolve<IFoo>(), typeof(Foo));
-            Assert.IsInstanceOfType(await Container.Resolve<IFoo>(Name), typeof(Foo1));
+            Assert.IsInstanceOfType(await Container.Resolve(typeof(IFoo)),       typeof(Foo));
+            Assert.IsInstanceOfType(await Container.Resolve(typeof(IFoo), Name), typeof(Foo1));
         }
 
         [TestMethod]
         public async Task NamedFactory()
         {
             // Arrange
-            await Container.RegisterFactory<IFoo>((c, t, n) => new Foo());
-            await Container.RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
+            ((IUnityContainer)Container).RegisterFactory<IFoo>((c, t, n) => new Foo())
+                                        .RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
 
             // Act / Validate
-            Assert.IsInstanceOfType(await Container.Resolve<IFoo>(), typeof(Foo));
-            Assert.IsInstanceOfType(await Container.Resolve<IFoo>(Name), typeof(Foo1));
+            Assert.IsInstanceOfType(await Container.Resolve(typeof(IFoo)),       typeof(Foo));
+            Assert.IsInstanceOfType(await Container.Resolve(typeof(IFoo), Name), typeof(Foo1));
         }
-
 
         [TestMethod]
         [ExpectedException(typeof(ResolutionFailedException))]
         public async Task NamedTypeNegative()
         {
             // Arrange
-            await Container.RegisterType<IFoo, Foo>();
-            await Container.RegisterType<IFoo, Foo1>(Name);
+            ((IUnityContainer)Container).RegisterType<IFoo, Foo>()
+                                        .RegisterType<IFoo, Foo1>(Name);
 
             // Act / Validate
-            await Container.Resolve<IFoo>("none");
+            await Container.Resolve(typeof(IFoo), "none");
         }
 
         [TestMethod]
@@ -105,11 +109,11 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedInstanceNegative()
         {
             // Arrange
-            await Container.RegisterInstance<IFoo>(new Foo());
-            await Container.RegisterInstance<IFoo>(Name, new Foo1());
+            ((IUnityContainer)Container).RegisterInstance<IFoo>(new Foo())
+                                        .RegisterInstance<IFoo>(Name, new Foo1());
 
             // Act / Validate
-            await Container.Resolve<IFoo>("none");
+            await Container.Resolve(typeof(IFoo), "none");
         }
 
         [TestMethod]
@@ -117,12 +121,31 @@ namespace Unity.Specification.Resolution.Basics
         public async Task NamedFactoryNegative()
         {
             // Arrange
-            await Container.RegisterFactory<IFoo>((c, t, n) => new Foo());
-            await Container.RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
+            ((IUnityContainer)Container).RegisterFactory<IFoo>((c, t, n) => new Foo())
+                                        .RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
 
             // Act / Validate
-            await Container.Resolve<IFoo>("none");
+            await Container.Resolve(typeof(IFoo), "none");
         }
 
+
+        [TestMethod]
+        public async Task NamedFactoryNegativeTry()
+        {
+            // Arrange
+            ((IUnityContainer)Container).RegisterFactory<IFoo>((c, t, n) => new Foo())
+                                        .RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
+
+            // Act / Validate
+            try
+            {
+                var instance = await Container.Resolve(typeof(IFoo), "none");
+
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ResolutionFailedException));
+            }
+        }
     }
 }
