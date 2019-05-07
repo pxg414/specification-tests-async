@@ -6,25 +6,25 @@ namespace Unity.Specification.Async.Registration.Instance
 {
     public abstract partial class SpecificationTests
     {
-        [Ignore]
-        [TestMethod]
-        public void Null_Object_Async()
-        {
-            var instance = new object();
+        //[Ignore]
+        //[TestMethod]
+        //public void Null_Object_Async()
+        //{
+        //    var instance = new object();
 
-            Container.RegisterInstance(null, null, instance, null);
-            //            Assert.AreEqual(Container.Resolve<string>(), instance);
-        }
+        //    Container.RegisterInstance(null, null, instance, null);
+        //    //            Assert.AreEqual(Container.Resolve<string>(), instance);
+        //}
 
-        [Ignore]
-        [TestMethod]
-        public void Empty_Object_Async()
-        {
-            var instance = new object();
+        //[Ignore]
+        //[TestMethod]
+        //public void Empty_Object_Async()
+        //{
+        //    var instance = new object();
 
-            Container.RegisterInstance(Enumerable.Empty<Type>(), null, instance, null);
-            //            Assert.AreEqual(Container.Resolve<string>(), instance);
-        }
+        //    Container.RegisterInstance(Enumerable.Empty<Type>(), null, instance, null);
+        //    //            Assert.AreEqual(Container.Resolve<string>(), instance);
+        //}
 
         //[TestMethod]
         //public void Instance_IUC_NamedObject_Async()
