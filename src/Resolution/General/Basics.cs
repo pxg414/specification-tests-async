@@ -147,5 +147,16 @@ namespace Unity.Specification.Resolution.Basics
                 Assert.IsInstanceOfType(ex, typeof(ResolutionFailedException));
             }
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public async Task UserExceptionIsNotWrappad()
+        {
+            // Arrange
+            ((IUnityContainer)Container).RegisterFactory<IFoo>(c => { throw new System.InvalidOperationException("User error"); });
+
+            // Act
+            await Container.Resolve<IFoo>();
+        }
     }
 }
