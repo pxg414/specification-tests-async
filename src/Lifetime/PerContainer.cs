@@ -8,7 +8,21 @@ namespace Unity.Specification.Lifetime
     public abstract partial class SpecificationTests
     {
         [TestMethod]
-        public async Task PerContainer_Instance_Null()
+        public async Task PerContainer_InstanceAsync()
+        {
+            // Arrange
+            var original = new Service();
+            ((IUnityContainer)Container).RegisterInstance(typeof(IService), null, original, InstanceLifetime.PerContainer);
+
+            // Act
+            var instance = await Container.Resolve<IService>();
+
+            // Validate
+            Assert.AreSame(original, instance);
+        }
+
+        [TestMethod]
+        public async Task PerContainer_InstanceAsync_Null()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterInstance(typeof(IService), null, null, InstanceLifetime.PerContainer);
@@ -22,7 +36,7 @@ namespace Unity.Specification.Lifetime
         }
 
         [TestMethod]
-        public async Task PerContainer_Factory_Null()
+        public async Task PerContainer_FactoryAsync_Null()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterFactory<IService>(c => null, FactoryLifetime.Singleton);
