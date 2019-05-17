@@ -9,7 +9,7 @@ namespace Unity.Specification.Lifetime
     {
         [TestMethod]
         [Ignore]
-        public void SameInstanceFromMultipleThreads()
+        public void SameInstanceFromMultipleThreadsAsync()
         {
             //await Container.RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerContainer);
 
@@ -18,12 +18,12 @@ namespace Unity.Specification.Lifetime
 
             //Thread thread1 = new Thread(delegate ()
             //{
-            //    result1 = await Container.Resolve<IService>();
+            //    result1 = Container.ResolveAsync<IService>();
             //});
 
             //Thread thread2 = new Thread(delegate ()
             //{
-            //    result2 = await Container.Resolve<IService>();
+            //    result2 = Container.ResolveAsync<IService>();
             //});
 
             //thread1.Name = "1";
@@ -42,7 +42,7 @@ namespace Unity.Specification.Lifetime
 
         [TestMethod]
         [Ignore]
-        public void ContainerControlledLifetimeDoesNotLeaveHangingLockIfBuildThrowsException()
+        public void ContainerControlledLifetimeDoesNotLeaveHangingLockIfBuildThrowsExceptionAsync()
         {
             //int count = 0;
             //bool fail = false;
@@ -63,7 +63,7 @@ namespace Unity.Specification.Lifetime
             //    {
             //        try
             //        {
-            //            result1 = await Container.Resolve<IService>();
+            //            result1 = Container.ResolveAsync<IService>();
             //        }
             //        catch (ResolutionFailedException)
             //        {
@@ -73,7 +73,7 @@ namespace Unity.Specification.Lifetime
             //Thread thread2 = new Thread(
             //    delegate()
             //    {
-            //        result2 = await Container.Resolve<IService>();
+            //        result2 = Container.ResolveAsync<IService>();
             //        thread2Finished = true;
             //    });
 

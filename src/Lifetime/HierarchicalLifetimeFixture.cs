@@ -6,57 +6,57 @@ namespace Unity.Specification.Lifetime
     public abstract partial class SpecificationTests
     {
         [TestMethod]
-        public async Task ThenResolvingInParentActsLikeContainerControlledLifetime()
+        public void ThenResolvingInParentActsLikeContainerControlledLifetimeAsync()
         {
-            await Container.RegisterType<TestClass>(TypeLifetime.Hierarchical);
+            ((IUnityContainer)Container).RegisterType<TestClass>(TypeLifetime.Hierarchical);
 
-            var o1 = await Container.Resolve<TestClass>();
-            var o2 = await Container.Resolve<TestClass>();
+            var o1 = Container.ResolveAsync<TestClass>();
+            var o2 = Container.ResolveAsync<TestClass>();
             Assert.AreSame(o1, o2);
         }
 
         [TestMethod]
-        public async Task ThenParentAndChildResolveDifferentInstances()
+        public async Task ThenParentAndChildResolveDifferentInstancesAsync()
         {
             var child1 = Container.CreateChildContainer();
             await Container.RegisterType<TestClass>(TypeLifetime.Hierarchical);
 
-            var o1 = await Container.Resolve<TestClass>();
-            var o2 = await child1.Resolve<TestClass>();
+            var o1 = Container.ResolveAsync<TestClass>();
+            var o2 = child1.ResolveAsync<TestClass>();
             Assert.AreNotSame(o1, o2);
         }
 
         [TestMethod]
-        public async Task ThenChildResolvesTheSameInstance()
+        public async Task ThenChildResolvesTheSameInstanceAsync()
         {
             var child1 = Container.CreateChildContainer();
             await Container.RegisterType<TestClass>(TypeLifetime.Hierarchical);
 
-            var o1 = await child1.Resolve<TestClass>();
-            var o2 = await child1.Resolve<TestClass>();
+            var o1 = child1.ResolveAsync<TestClass>();
+            var o2 = child1.ResolveAsync<TestClass>();
             Assert.AreSame(o1, o2);
         }
 
         [TestMethod]
-        public async Task ThenSiblingContainersResolveDifferentInstances()
+        public async Task ThenSiblingContainersResolveDifferentInstancesAsync()
         {
             var child1 = Container.CreateChildContainer();
             var child2 = Container.CreateChildContainer();
             await Container.RegisterType<TestClass>(TypeLifetime.Hierarchical);
 
-            var o1 = await child1.Resolve<TestClass>();
-            var o2 = await child2.Resolve<TestClass>();
+            var o1 = child1.ResolveAsync<TestClass>();
+            var o2 = child2.ResolveAsync<TestClass>();
             Assert.AreNotSame(o1, o2);
         }
 
         [TestMethod]
-        public async Task ThenDisposingOfChildContainerDisposesOnlyChildObject()
+        public async Task ThenDisposingOfChildContainerDisposesOnlyChildObjectAsync()
         {
             var child1 = Container.CreateChildContainer();
             await Container.RegisterType<TestClass>(TypeLifetime.Hierarchical);
 
-            var o1 = (TestClass) await Container.Resolve<TestClass>();
-            var o2 = (TestClass) await child1.Resolve<TestClass>();
+            var o1 = Container.ResolveAsync<TestClass>();
+            var o2 = child1.ResolveAsync<TestClass>();
 
             child1.Dispose();
             Assert.IsFalse(o1.Disposed);

@@ -13,8 +13,8 @@ namespace Unity.Specification.Diagnostic.Lifetime
         {
             ((IUnityContainer)Container).RegisterType<IService, Service>(TypeLifetime.PerThread);
 
-            var a = Container.Resolve<IService>();
-            var b = Container.Resolve<IService>();
+            var a = Container.ResolveAsync<IService>();
+            var b = Container.ResolveAsync<IService>();
 
             Assert.AreSame(a, b);
         }
@@ -43,12 +43,12 @@ namespace Unity.Specification.Diagnostic.Lifetime
 
         [TestMethod]
         [Ignore]
-        public async Task PerThread_Factory_SameThread()
+        public void PerThread_Factory_SameThread()
         {
             ((IUnityContainer)Container).RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerThread);
 
-            var a = await Container.Resolve<IService>();
-            var b = await Container.Resolve<IService>();
+            var a = Container.ResolveAsync<IService>();
+            var b = Container.ResolveAsync<IService>();
 
             Assert.AreSame(a, b);
         }

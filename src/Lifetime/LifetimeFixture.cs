@@ -11,24 +11,24 @@ namespace Unity.Specification.Lifetime
         /// Registering var type twice with SetSingleton method. once with default and second with name.
         /// </summary>
         [TestMethod]
-        public async Task CheckSetSingletonDoneTwice()
+        public async Task CheckSetSingletonDoneTwiceAsync()
         {
             await Container.RegisterType<Service>(TypeLifetime.PerContainer);
             await Container.RegisterType<Service>("hello", TypeLifetime.PerContainer);
 
-            var obj  = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
+            var obj  = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
             
             Assert.AreNotSame(obj, obj1);
         }
 
         [TestMethod]
-        public async Task CheckSingletonWithDependencies()
+        public async Task CheckSingletonWithDependenciesAsync()
         {
             await Container.RegisterType<ObjectWithOneDependency>(TypeLifetime.PerContainer);
 
-            var result1 = (ObjectWithOneDependency) await Container.Resolve<ObjectWithOneDependency>();
-            var result2 = (ObjectWithOneDependency) await Container.Resolve<ObjectWithOneDependency>();
+            var result1 = (ObjectWithOneDependency) Container.ResolveAsync<ObjectWithOneDependency>();
+            var result2 = (ObjectWithOneDependency) Container.ResolveAsync<ObjectWithOneDependency>();
 
             Assert.IsNotNull(result1);
             Assert.IsNotNull(result2);
@@ -38,12 +38,12 @@ namespace Unity.Specification.Lifetime
         }
 
         [TestMethod]
-        public async Task CheckSingletonAsDependencies()
+        public async Task CheckSingletonAsDependenciesAsync()
         {
             await Container.RegisterType<ObjectWithOneDependency>(TypeLifetime.PerContainer);
 
-            var result1 = (ObjectWithTwoConstructorDependencies) await Container.Resolve<ObjectWithTwoConstructorDependencies>();
-            var result2 = (ObjectWithTwoConstructorDependencies) await Container.Resolve<ObjectWithTwoConstructorDependencies>();
+            var result1 = (ObjectWithTwoConstructorDependencies) Container.ResolveAsync<ObjectWithTwoConstructorDependencies>();
+            var result2 = (ObjectWithTwoConstructorDependencies) Container.ResolveAsync<ObjectWithTwoConstructorDependencies>();
 
             Assert.IsNotNull(result1);
             Assert.IsNotNull(result2);
@@ -58,14 +58,14 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task CheckRegisterInstanceDoneTwice()
+        public async Task CheckRegisterInstanceDoneTwiceAsync()
         {
             var aInstance = new Service();
             await Container.RegisterInstance<Service>(aInstance);
             await Container.RegisterInstance<Service>("hello", aInstance);
 
-            var obj  = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
+            var obj  = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
             
             Assert.AreSame(obj, aInstance);
             Assert.AreSame(obj1, aInstance);
@@ -76,12 +76,12 @@ namespace Unity.Specification.Lifetime
         /// Registering var type as singleton and handling its lifetime. Using SetLifetime method.
         /// </summary>
         [TestMethod]
-        public async Task SetLifetimeTwiceWithLifetimeHandle()
+        public async Task SetLifetimeTwiceWithLifetimeHandleAsync()
         {
             await Container.RegisterType<Service>(TypeLifetime.PerContainer);
             await Container.RegisterType<Service>("hello", new HierarchicalLifetimeManager());
-            var obj = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
+            var obj = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
             
             Assert.AreNotSame(obj, obj1);
         }
@@ -91,14 +91,14 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetSingletonRegisterInstanceTwice()
+        public async Task SetSingletonRegisterInstanceTwiceAsync()
         {
             var aInstance = new Service();
             await Container.RegisterInstance<Service>(aInstance);
             await Container.RegisterInstance<Service>("hello", aInstance);
 
-            var obj = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
+            var obj = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
             
             Assert.AreSame(obj, obj1);
         }
@@ -107,12 +107,12 @@ namespace Unity.Specification.Lifetime
         /// SetLifetime class A. Then use GetOrDefault method to get the instances, once without name, second with name.
         /// </summary>
         [TestMethod]
-        public async Task SetLifetimeGetTwice()
+        public async Task SetLifetimeGetTwiceAsync()
         {
             await Container.RegisterType<Service>(TypeLifetime.PerContainer);
 
-            var obj  = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
+            var obj  = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
          
             Assert.AreNotSame(obj, obj1);
         }
@@ -123,7 +123,7 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetSingletonRegisterInstanceTwiceSetLifetimeTwice()
+        public async Task SetSingletonRegisterInstanceTwiceSetLifetimeTwiceAsync()
         {
             var aInstance = new Service();
 
@@ -132,8 +132,8 @@ namespace Unity.Specification.Lifetime
             await Container.RegisterType<Service>(TypeLifetime.PerContainer);
             await Container.RegisterType<Service>("hello1", TypeLifetime.PerContainer);
 
-            var obj = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello1");
+            var obj = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello1");
             
             Assert.AreNotSame(obj, obj1);
         }
@@ -145,16 +145,16 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetSingletonNoNameRegisterInstanceDiffNames()
+        public async Task SetSingletonNoNameRegisterInstanceDiffNamesAsync()
         {
             var aInstance = new Service();
             await Container.RegisterInstance<Service>(aInstance);
             await Container.RegisterInstance<Service>("hello", aInstance);
             await Container.RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
 
-            var obj = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
-            var obj2 = await Container.Resolve<Service>("hi");
+            var obj = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
+            var obj2 = Container.ResolveAsync<Service>("hi");
 
             Assert.AreSame(obj, obj1);
             Assert.AreSame(obj1, obj2);
@@ -167,7 +167,7 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetLifetimeNoNameRegisterInstanceDiffNames()
+        public async Task SetLifetimeNoNameRegisterInstanceDiffNamesAsync()
         {
             var aInstance = new Service();
             await Container.RegisterType<Service>(TypeLifetime.PerContainer);
@@ -175,9 +175,9 @@ namespace Unity.Specification.Lifetime
             await Container.RegisterInstance<Service>("hello", aInstance);
             await Container.RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
 
-            var obj = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
-            var obj2 = await Container.Resolve<Service>("hi");
+            var obj = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
+            var obj2 = Container.ResolveAsync<Service>("hi");
             
             Assert.AreSame(obj, obj1);
             Assert.AreSame(obj1, obj2);
@@ -190,7 +190,7 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetSingletonWithNameRegisterInstanceDiffNames()
+        public async Task SetSingletonWithNameRegisterInstanceDiffNamesAsync()
         {
             var aInstance = new Service();
             await Container.RegisterType<Service>("set", TypeLifetime.PerContainer);
@@ -198,9 +198,9 @@ namespace Unity.Specification.Lifetime
             await Container.RegisterInstance<Service>("hello", aInstance);
             await Container.RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
 
-            var obj = await Container.Resolve<Service>("set");
-            var obj1 = await Container.Resolve<Service>("hello");
-            var obj2 = await Container.Resolve<Service>("hi");
+            var obj = Container.ResolveAsync<Service>("set");
+            var obj1 = Container.ResolveAsync<Service>("hello");
+            var obj2 = Container.ResolveAsync<Service>("hi");
             
             Assert.AreNotSame(obj, obj1);
             Assert.AreSame(obj1, obj2);
@@ -214,7 +214,7 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetLifetimeWithNameRegisterInstanceDiffNames()
+        public async Task SetLifetimeWithNameRegisterInstanceDiffNamesAsync()
         {
             var aInstance = new Service();
             await Container.RegisterType<Service>("set", TypeLifetime.PerContainer);
@@ -222,9 +222,9 @@ namespace Unity.Specification.Lifetime
             await Container.RegisterInstance<Service>("hello", aInstance);
             await Container.RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
 
-            var obj = await Container.Resolve<Service>("set");
-            var obj1 = await Container.Resolve<Service>("hello");
-            var obj2 = await Container.Resolve<Service>("hi");
+            var obj = Container.ResolveAsync<Service>("set");
+            var obj1 = Container.ResolveAsync<Service>("hello");
+            var obj2 = Container.ResolveAsync<Service>("hi");
             
             Assert.AreNotSame(obj, obj1);
             Assert.AreSame(aInstance, obj1);
@@ -239,7 +239,7 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetSingletonClassARegisterInstanceOfAandBWithSameName()
+        public async Task SetSingletonClassARegisterInstanceOfAandBWithSameNameAsync()
         {
             var aInstance = new Service();
             var bInstance = new OtherService();
@@ -249,10 +249,10 @@ namespace Unity.Specification.Lifetime
             await Container.RegisterInstance<OtherService>("hi", bInstance);
             await Container.RegisterInstance<OtherService>("hello", bInstance, new ExternallyControlledLifetimeManager());
 
-            var obj = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
-            var obj2 = await Container.Resolve<OtherService>("hello");
-            var obj3 = await Container.Resolve<OtherService>("hi");
+            var obj = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
+            var obj2 = Container.ResolveAsync<OtherService>("hello");
+            var obj3 = Container.ResolveAsync<OtherService>("hi");
             
             Assert.AreSame(obj, obj1);
             Assert.AreNotSame(obj, obj2);
@@ -265,16 +265,16 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetSingletonByNameRegisterInstanceOnit()
+        public async Task SetSingletonByNameRegisterInstanceOnitAsync()
         {
             var aInstance = new Service();
             await Container.RegisterType<Service>("SetA", TypeLifetime.PerContainer);
             await Container.RegisterInstance<Service>(aInstance);
             await Container.RegisterInstance<Service>("hello", aInstance);
 
-            var obj = await Container.Resolve<Service>("SetA");
-            var obj1 = await Container.Resolve<Service>();
-            var obj2 = await Container.Resolve<Service>("hello");
+            var obj = Container.ResolveAsync<Service>("SetA");
+            var obj1 = Container.ResolveAsync<Service>();
+            var obj2 = Container.ResolveAsync<Service>("hello");
             
             Assert.AreSame(obj1, obj2);
             Assert.AreNotSame(obj, obj2);
@@ -284,13 +284,13 @@ namespace Unity.Specification.Lifetime
         /// Use SetLifetime twice, once with parameter, and without parameter
         /// </summary>
         [TestMethod]
-        public async Task TestSetLifetime()
+        public async Task TestSetLifetimeAsync()
         {
             await Container.RegisterType<Service>(TypeLifetime.PerContainer);
             await Container.RegisterType<Service>("hello", TypeLifetime.PerContainer);
 
-            var obj = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("hello");
+            var obj = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("hello");
             
             Assert.AreNotSame(obj, obj1);
         }
@@ -301,7 +301,7 @@ namespace Unity.Specification.Lifetime
         /// </summary>
         [TestMethod]
         [Ignore]
-        public async Task SetSingletonDefaultNameRegisterInstance()
+        public async Task SetSingletonDefaultNameRegisterInstanceAsync()
         {
             var aInstance = new Service();
 
@@ -311,9 +311,9 @@ namespace Unity.Specification.Lifetime
             await Container.RegisterInstance("hello", aInstance);
             await Container.RegisterInstance("hello", aInstance, new ExternallyControlledLifetimeManager());
 
-            var obj = await Container.Resolve<Service>();
-            var obj1 = await Container.Resolve<Service>("SetA");
-            var obj2 = await Container.Resolve<Service>("hello");
+            var obj = Container.ResolveAsync<Service>();
+            var obj1 = Container.ResolveAsync<Service>("SetA");
+            var obj2 = Container.ResolveAsync<Service>("hello");
 
             Assert.AreNotSame(obj, obj1);
             Assert.AreSame(obj, obj2);
@@ -321,10 +321,10 @@ namespace Unity.Specification.Lifetime
 
         /// <summary>
         /// Registering var type in both parent as well as child. Now trying to Resolve from both
-        /// check if same or diff instances are returned.
+        /// check if same or different instances are returned.
         /// </summary>
         [TestMethod]
-        public async Task RegisterWithParentAndChild()
+        public async Task RegisterWithParentAndChildAsync()
         {
             //register type UnityTestClass
             var child = Container.CreateChildContainer();
@@ -332,8 +332,8 @@ namespace Unity.Specification.Lifetime
             await Container.RegisterType<Service>(TypeLifetime.PerContainer);
             await child.RegisterType<Service>(TypeLifetime.PerContainer);
 
-            var mytestparent = await Container.Resolve<Service>();
-            var mytestchild =  await child.Resolve<Service>();
+            var mytestparent = Container.ResolveAsync<Service>();
+            var mytestchild =  child.ResolveAsync<Service>();
 
             Assert.AreNotSame(mytestparent, mytestchild);
         }
@@ -343,33 +343,34 @@ namespace Unity.Specification.Lifetime
         /// same instance is returned when asked for Resolve.
         /// </summary>
         [TestMethod]
-        public async Task UseContainerControlledLifetime()
+        public async Task UseContainerControlledLifetimeAsync()
         {
             await Container.RegisterType<ObjectWithOneDependency>(TypeLifetime.PerContainer);
 
-            var parentinstance = (ObjectWithOneDependency) await Container.Resolve<ObjectWithOneDependency>();
+            var parentinstance = (ObjectWithOneDependency) Container.ResolveAsync<ObjectWithOneDependency>();
             var name = parentinstance.id;
             parentinstance = null;
             GC.Collect();
 
-            var parentinstance1 = (ObjectWithOneDependency) await Container.Resolve<ObjectWithOneDependency>();
+            var parentinstance1 = (ObjectWithOneDependency) Container.ResolveAsync<ObjectWithOneDependency>();
             Assert.AreEqual(name, parentinstance1.id);
         }
 
         [TestMethod]
-        public async Task TestStringEmpty()
+        [Ignore]
+        public async Task TestStringEmptyAsync()
         {
             await Container.RegisterType<Service>(TypeLifetime.PerContainer);
             await Container.RegisterType<Service>(string.Empty, TypeLifetime.PerContainer);
             await Container.RegisterType<Service>(null, TypeLifetime.PerContainer);
 
-            var a = Container.Resolve<Service>();
-            var b = Container.Resolve<Service>(string.Empty);
-            var c = Container.Resolve<Service>((string)null);
+            var a = Container.ResolveAsync<Service>();
+            var b = Container.ResolveAsync<Service>(string.Empty);
+            var c = Container.ResolveAsync<Service>((string)null);
 
-            Assert.AreNotEqual(await a, await b);
-            Assert.AreNotEqual(await b, await c);
-            Assert.AreEqual(await a, await c);
+            Assert.AreNotEqual(a, b);
+            Assert.AreNotEqual(b, c);
+            Assert.AreEqual(a, c);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(ClassWithStringProperty)); }
+            try { await Container.ResolveAsync(typeof(ClassWithStringProperty)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
@@ -26,7 +26,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(ClassWithStringPropertyDependency)); }
+            try { await Container.ResolveAsync(typeof(ClassWithStringPropertyDependency)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
@@ -40,7 +40,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(ClassWithNamedStringProperty)); }
+            try { await Container.ResolveAsync(typeof(ClassWithNamedStringProperty)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate

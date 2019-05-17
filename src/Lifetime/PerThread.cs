@@ -9,19 +9,19 @@ namespace Unity.Specification.Lifetime
     {
         [TestMethod]
         [Ignore]
-        public void PerThread_Type_SameThread()
+        public void PerThread_Type_SameThreadAsync()
         {
             ((IUnityContainer)Container).RegisterType<IService, Service>(TypeLifetime.PerThread);
 
-            var a = Container.Resolve<IService>();
-            var b = Container.Resolve<IService>();
+            var a = Container.ResolveAsync<IService>();
+            var b = Container.ResolveAsync<IService>();
 
             Assert.AreSame(a, b);
         }
 
         [TestMethod]
         [Ignore]
-        public void PerThread_Type_DifferentThreads()
+        public void PerThread_Type_DifferentThreadsAsync()
         {
             ((IUnityContainer)Container).RegisterType<IService, Service>(TypeLifetime.PerThread);
 
@@ -43,19 +43,19 @@ namespace Unity.Specification.Lifetime
 
         [TestMethod]
         [Ignore]
-        public async Task PerThread_Factory_SameThread()
+        public void PerThread_Factory_SameThreadAsync()
         {
             ((IUnityContainer)Container).RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerThread);
 
-            var a = await Container.Resolve<IService>();
-            var b = await Container.Resolve<IService>();
+            var a = Container.ResolveAsync<IService>();
+            var b = Container.ResolveAsync<IService>();
 
             Assert.AreSame(a, b);
         }
 
         [TestMethod]
         [Ignore]
-        public void PerThread_Factory_DifferentThreads()
+        public void PerThread_Factory_DifferentThreadsAsync()
         {
             ((IUnityContainer)Container).RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerThread);
 

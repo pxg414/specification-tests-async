@@ -12,7 +12,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(ClassWithStringField)); }
+            try { await Container.ResolveAsync(typeof(ClassWithStringField)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
@@ -26,7 +26,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(ClassWithStringFieldDependency)); }
+            try { await Container.ResolveAsync(typeof(ClassWithStringFieldDependency)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
@@ -41,7 +41,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(ClassWithNamedStringField)); }
+            try { await Container.ResolveAsync(typeof(ClassWithNamedStringField)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate

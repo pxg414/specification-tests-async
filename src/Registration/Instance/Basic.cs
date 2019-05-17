@@ -13,7 +13,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //    var instance = new object();
 
         //    Container.RegisterInstance(null, null, instance, null);
-        //    //            Assert.AreEqual(Container.Resolve<string>(), instance);
+        //    //            Assert.AreEqual(Container.ResolveAsync<string>(), instance);
         //}
 
         //[Ignore]
@@ -23,7 +23,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //    var instance = new object();
 
         //    Container.RegisterInstance(Enumerable.Empty<Type>(), null, instance, null);
-        //    //            Assert.AreEqual(Container.Resolve<string>(), instance);
+        //    //            Assert.AreEqual(Container.ResolveAsync<string>(), instance);
         //}
 
         //[TestMethod]
@@ -33,8 +33,8 @@ namespace Unity.Specification.Async.Registration.Instance
 
         //    Container.RegisterInstance(null, instance, instance, null);
 
-        //    Assert.AreEqual(Container.Resolve<string>(instance), instance);
-        //    Assert.ThrowsException<ResolutionFailedException>(() => Container.Resolve<int>());
+        //    Assert.AreEqual(Container.ResolveAsync<string>(instance), instance);
+        //    Assert.ThrowsException<ResolutionFailedException>(() => Container.ResolveAsync<int>());
         //}
 
         //[TestMethod]
@@ -44,8 +44,8 @@ namespace Unity.Specification.Async.Registration.Instance
 
         //    Container.RegisterInstance(typeof(IService), null, instance, null);
 
-        //    Assert.AreEqual(Container.Resolve<IService>(), instance);
-        //    Assert.AreNotEqual(Container.Resolve<Service>(), instance);
+        //    Assert.AreEqual(Container.ResolveAsync<IService>(), instance);
+        //    Assert.AreNotEqual(Container.ResolveAsync<Service>(), instance);
         //}
 
         //[TestMethod]
@@ -55,7 +55,7 @@ namespace Unity.Specification.Async.Registration.Instance
 
         //    Container.RegisterInstance(instance);
 
-        //    Assert.AreEqual(Container.Resolve<string>(), instance);
+        //    Assert.AreEqual(Container.ResolveAsync<string>(), instance);
         //}
 
         //[TestMethod]
@@ -65,8 +65,8 @@ namespace Unity.Specification.Async.Registration.Instance
 
         //    Container.RegisterInstance(instance, instance);
 
-        //    Assert.AreEqual(Container.Resolve<string>(instance), instance);
-        //    Assert.ThrowsException<ResolutionFailedException>(() => Container.Resolve<int>());
+        //    Assert.AreEqual(Container.ResolveAsync<string>(instance), instance);
+        //    Assert.ThrowsException<ResolutionFailedException>(() => Container.ResolveAsync<int>());
         //}
 
         //[TestMethod]
@@ -76,8 +76,8 @@ namespace Unity.Specification.Async.Registration.Instance
 
         //    Container.RegisterInstance<IService>(instance);
 
-        //    Assert.AreEqual(Container.Resolve<IService>(), instance);
-        //    Assert.AreNotEqual(Container.Resolve<Service>(), instance);
+        //    Assert.AreEqual(Container.ResolveAsync<IService>(), instance);
+        //    Assert.AreNotEqual(Container.ResolveAsync<Service>(), instance);
         //}
 
         //[TestMethod]
@@ -88,9 +88,9 @@ namespace Unity.Specification.Async.Registration.Instance
 
         //    Container.RegisterInstance<IService>(local, instance);
 
-        //    Assert.AreEqual(Container.Resolve<IService>(local), instance);
-        //    Assert.AreNotEqual(Container.Resolve<Service>(), instance);
-        //    Assert.ThrowsException<ResolutionFailedException>(() => Container.Resolve<IService>(Guid.NewGuid().ToString()));
+        //    Assert.AreEqual(Container.ResolveAsync<IService>(local), instance);
+        //    Assert.AreNotEqual(Container.ResolveAsync<Service>(), instance);
+        //    Assert.ThrowsException<ResolutionFailedException>(() => Container.ResolveAsync<IService>(Guid.NewGuid().ToString()));
         //}
 
         //[TestMethod]
@@ -99,7 +99,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //    var instance = Guid.NewGuid().ToString();
 
         //    Container.RegisterInstance(instance.GetType(), null, instance, new ExternallyControlledLifetimeManager());
-        //    Assert.AreEqual(Container.Resolve<string>(), instance);
+        //    Assert.AreEqual(Container.ResolveAsync<string>(), instance);
         //}
 
 
@@ -111,7 +111,7 @@ namespace Unity.Specification.Async.Registration.Instance
         //    Container.RegisterInstance(instance);
         //    Container.RegisterType<IService, Service>();
 
-        //    Assert.AreEqual(Container.Resolve<IService>(), instance);
+        //    Assert.AreEqual(Container.ResolveAsync<IService>(), instance);
         //}
 
         //[TestMethod]
@@ -124,9 +124,9 @@ namespace Unity.Specification.Async.Registration.Instance
         //    var child = parent.CreateChildContainer();
         //    child.RegisterInstance(null, null, Guid.NewGuid().ToString(), new ContainerControlledLifetimeManager());
 
-        //    Assert.AreSame(parent.Resolve<string>(), parent.Resolve<string>());
-        //    Assert.AreSame(child.Resolve<string>(), child.Resolve<string>());
-        //    Assert.AreNotSame(parent.Resolve<string>(), child.Resolve<string>());
+        //    Assert.AreSame(parent.ResolveAsync<string>(), parent.ResolveAsync<string>());
+        //    Assert.AreSame(child.ResolveAsync<string>(), child.ResolveAsync<string>());
+        //    Assert.AreNotSame(parent.ResolveAsync<string>(), child.ResolveAsync<string>());
         //}
     }
 }

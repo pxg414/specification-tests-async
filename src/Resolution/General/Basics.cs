@@ -9,8 +9,8 @@ namespace Unity.Specification.Resolution.Basics
         [TestMethod]
         public async Task UnityContainer()
         {
-            var iuc  = await Container.Resolve(typeof(IUnityContainer));
-            var iuca = await Container.Resolve(typeof(IUnityContainerAsync));
+            var iuc  = await Container.ResolveAsync(typeof(IUnityContainer));
+            var iuca = await Container.ResolveAsync(typeof(IUnityContainerAsync));
 
             Assert.IsNotNull(iuc);
             Assert.IsNotNull(iuca);
@@ -23,8 +23,8 @@ namespace Unity.Specification.Resolution.Basics
         public async Task CanCreateObject()
         {
             // Act/Verify
-            var instance = await Container.Resolve(typeof(object));
-            var repeated = await Container.Resolve(typeof(object));
+            var instance = await Container.ResolveAsync(typeof(object));
+            var repeated = await Container.ResolveAsync(typeof(object));
 
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, typeof(object));
@@ -34,7 +34,7 @@ namespace Unity.Specification.Resolution.Basics
         public async Task ContainerResolvesRecursiveConstructorDependencies()
         {
             // Act
-            var dep = (ObjectWithOneDependency)await Container.Resolve(typeof(ObjectWithOneDependency));
+            var dep = (ObjectWithOneDependency)await Container.ResolveAsync(typeof(ObjectWithOneDependency));
 
             // Verify
             Assert.IsNotNull(dep);
@@ -46,7 +46,7 @@ namespace Unity.Specification.Resolution.Basics
         public async Task ContainerResolvesMultipleRecursiveConstructorDependencies()
         {
             // Act
-            var dep = (ObjectWithTwoConstructorDependencies)await Container.Resolve(typeof(ObjectWithTwoConstructorDependencies));
+            var dep = (ObjectWithTwoConstructorDependencies)await Container.ResolveAsync(typeof(ObjectWithTwoConstructorDependencies));
 
             // Verify
             dep.Validate();
@@ -60,8 +60,8 @@ namespace Unity.Specification.Resolution.Basics
                                         .RegisterType<IFoo, Foo1>(Name);
 
             // Act 
-            var instance1 = await Container.Resolve(typeof(IFoo));
-            var instance2 = await Container.Resolve(typeof(IFoo), Name);
+            var instance1 = await Container.ResolveAsync(typeof(IFoo));
+            var instance2 = await Container.ResolveAsync(typeof(IFoo), Name);
 
             // Validate
             Assert.IsInstanceOfType(instance1, typeof(Foo));
@@ -76,8 +76,8 @@ namespace Unity.Specification.Resolution.Basics
                                         .RegisterInstance<IFoo>(Name, new Foo1());
 
             // Act / Validate
-            Assert.IsInstanceOfType(await Container.Resolve(typeof(IFoo)),       typeof(Foo));
-            Assert.IsInstanceOfType(await Container.Resolve(typeof(IFoo), Name), typeof(Foo1));
+            Assert.IsInstanceOfType(await Container.ResolveAsync(typeof(IFoo)),       typeof(Foo));
+            Assert.IsInstanceOfType(await Container.ResolveAsync(typeof(IFoo), Name), typeof(Foo1));
         }
 
         [TestMethod]
@@ -88,8 +88,8 @@ namespace Unity.Specification.Resolution.Basics
                                         .RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
 
             // Act / Validate
-            Assert.IsInstanceOfType(await Container.Resolve(typeof(IFoo)),       typeof(Foo));
-            Assert.IsInstanceOfType(await Container.Resolve(typeof(IFoo), Name), typeof(Foo1));
+            Assert.IsInstanceOfType(await Container.ResolveAsync(typeof(IFoo)),       typeof(Foo));
+            Assert.IsInstanceOfType(await Container.ResolveAsync(typeof(IFoo), Name), typeof(Foo1));
         }
 
         [TestMethod]
@@ -101,7 +101,7 @@ namespace Unity.Specification.Resolution.Basics
                                         .RegisterType<IFoo, Foo1>(Name);
 
             // Act / Validate
-            await Container.Resolve(typeof(IFoo), "none");
+            await Container.ResolveAsync(typeof(IFoo), "none");
         }
 
         [TestMethod]
@@ -113,7 +113,7 @@ namespace Unity.Specification.Resolution.Basics
                                         .RegisterInstance<IFoo>(Name, new Foo1());
 
             // Act / Validate
-            await Container.Resolve(typeof(IFoo), "none");
+            await Container.ResolveAsync(typeof(IFoo), "none");
         }
 
         [TestMethod]
@@ -125,7 +125,7 @@ namespace Unity.Specification.Resolution.Basics
                                         .RegisterFactory<IFoo>(Name, (c, t, n) => new Foo1());
 
             // Act / Validate
-            await Container.Resolve(typeof(IFoo), "none");
+            await Container.ResolveAsync(typeof(IFoo), "none");
         }
 
 
@@ -139,7 +139,7 @@ namespace Unity.Specification.Resolution.Basics
             // Act / Validate
             try
             {
-                var instance = await Container.Resolve(typeof(IFoo), "none");
+                var instance = await Container.ResolveAsync(typeof(IFoo), "none");
 
             }
             catch (Exception ex)
@@ -156,7 +156,7 @@ namespace Unity.Specification.Resolution.Basics
             ((IUnityContainer)Container).RegisterFactory<IFoo>(c => { throw new System.InvalidOperationException("User error"); });
 
             // Act
-            await Container.Resolve<IFoo>();
+            Container.ResolveAsync<IFoo>();
         }
     }
 }

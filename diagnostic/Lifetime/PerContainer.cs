@@ -6,31 +6,31 @@ namespace Unity.Specification.Diagnostic.Lifetime
     public abstract partial class SpecificationTests
     {
         [TestMethod]
-        public async Task PerContainer_Instance_Null()
+        public void PerContainer_Instance_Null()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterInstance(typeof(IService), null, null, InstanceLifetime.PerContainer);
 
             // Act
-            var instance = await Container.Resolve<IService>();
+            var instance = Container.ResolveAsync<IService>();
 
             // Validate
             Assert.IsNull(instance);
-            Assert.IsNull(await Container.Resolve<IService>());
+            Assert.IsNull(Container.ResolveAsync<IService>());
         }
 
         [TestMethod]
-        public async Task PerContainer_Factory_Null()
+        public void PerContainer_Factory_Null()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterFactory<IService>(c => null, FactoryLifetime.Singleton);
 
             // Act
-            var instance = await Container.Resolve<IService>();
+            var instance = Container.ResolveAsync<IService>();
 
             // Validate
             Assert.IsNull(instance);
-            Assert.IsNull(await Container.Resolve<IService>());
+            Assert.IsNull(Container.ResolveAsync<IService>());
         }
     }
 }

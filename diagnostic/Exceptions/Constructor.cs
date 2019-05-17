@@ -12,7 +12,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(string)); }
+            try { await Container.ResolveAsync(typeof(string)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
@@ -26,7 +26,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(ClassWithStringDependency)); }
+            try { await Container.ResolveAsync(typeof(ClassWithStringDependency)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
@@ -40,7 +40,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             Exception exception = null;
 
             // Act
-            try { await Container.Resolve(typeof(ClassWithOtherDependency)); }
+            try { await Container.ResolveAsync(typeof(ClassWithOtherDependency)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
@@ -56,7 +56,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             ((IUnityContainer)Container).RegisterType<IProvider, Provider>();
 
             // Act
-            try { await Container.Resolve(typeof(IProvider)); }
+            try { await Container.ResolveAsync(typeof(IProvider)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
@@ -72,7 +72,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
             ((IUnityContainer)Container).RegisterType<IProvider, Provider>();
 
             // Act
-            try { await Container.Resolve(typeof(DependsOnDependOnProvider)); }
+            try { await Container.ResolveAsync(typeof(DependsOnDependOnProvider)); }
             catch (Exception ex) { exception = ex; }
 
             // Validate
