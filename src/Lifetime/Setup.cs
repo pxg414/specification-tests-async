@@ -14,12 +14,18 @@ namespace Unity.Specification.Lifetime
             base.Setup();
         }
 
-
         private void ThreadProcedure(object o)
         {
             ThreadInformation info = o as ThreadInformation;
 
-            info.SetThreadResult(Thread.CurrentThread, info.Container.Resolve<IService>());
+            try
+            {
+                info.SetThreadResult(Thread.CurrentThread, info.Container.ResolveAsync<IService>());
+            }
+            catch (System.Exception ex)
+            {
+                info.SetThreadResult(Thread.CurrentThread, ex);
+            }
         }
 
         public class ThreadInformation
@@ -28,15 +34,15 @@ namespace Unity.Specification.Lifetime
 
             public ThreadInformation(IUnityContainerAsync container)
             {
-                // TODO: Container = container;
-                ThreadResults = new Dictionary<Thread, IService>();
+                Container = container;
+                ThreadResults = new Dictionary<Thread, object>();
             }
 
-            public IUnityContainer Container { get; }
+            public IUnityContainerAsync Container { get; }
 
-            public Dictionary<Thread, IService> ThreadResults { get; }
+            public Dictionary<Thread, object> ThreadResults { get; }
 
-            public void SetThreadResult(Thread t, IService result)
+            public void SetThreadResult(Thread t, object result)
             {
                 lock (dictLock)
                 {
@@ -44,7 +50,6 @@ namespace Unity.Specification.Lifetime
                 }
             }
         }
-
     }
 
     #region Test Data

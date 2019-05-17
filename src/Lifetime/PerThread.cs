@@ -1,14 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+using System;
+using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Unity.Specification.Lifetime
 {
     public abstract partial class SpecificationTests
     {
         [TestMethod]
-        [Ignore]
+        [ExpectedException(typeof(ResolutionFailedException))]
         public void PerThread_Type_SameThreadAsync()
         {
             ((IUnityContainer)Container).RegisterType<IService, Service>(TypeLifetime.PerThread);
@@ -20,7 +20,6 @@ namespace Unity.Specification.Lifetime
         }
 
         [TestMethod]
-        [Ignore]
         public void PerThread_Type_DifferentThreadsAsync()
         {
             ((IUnityContainer)Container).RegisterType<IService, Service>(TypeLifetime.PerThread);
@@ -35,26 +34,24 @@ namespace Unity.Specification.Lifetime
             t1.Join();
             t2.Join();
 
-            var a = new List<IService>(info.ThreadResults.Values)[0];
-            var b = new List<IService>(info.ThreadResults.Values)[1];
+            var a = info.ThreadResults.Values.FirstOrDefault();
+            var b = info.ThreadResults.Values.FirstOrDefault();
 
-            Assert.AreNotSame(a, b);
+            Assert.IsInstanceOfType(a, typeof(Exception));
+            Assert.IsInstanceOfType(b, typeof(Exception));
         }
 
         [TestMethod]
-        [Ignore]
+        [ExpectedException(typeof(ResolutionFailedException))]
         public void PerThread_Factory_SameThreadAsync()
         {
             ((IUnityContainer)Container).RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerThread);
 
             var a = Container.ResolveAsync<IService>();
             var b = Container.ResolveAsync<IService>();
-
-            Assert.AreSame(a, b);
         }
 
         [TestMethod]
-        [Ignore]
         public void PerThread_Factory_DifferentThreadsAsync()
         {
             ((IUnityContainer)Container).RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerThread);
@@ -69,10 +66,11 @@ namespace Unity.Specification.Lifetime
             t1.Join();
             t2.Join();
 
-            var a = new List<IService>(info.ThreadResults.Values)[0];
-            var b = new List<IService>(info.ThreadResults.Values)[1];
+            var a = info.ThreadResults.Values.FirstOrDefault();
+            var b = info.ThreadResults.Values.FirstOrDefault();
 
-            Assert.AreNotSame(a, b);
+            Assert.IsInstanceOfType(a, typeof(Exception));
+            Assert.IsInstanceOfType(b, typeof(Exception));
         }
     }
 }

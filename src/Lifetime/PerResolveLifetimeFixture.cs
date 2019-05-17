@@ -6,7 +6,6 @@ namespace Unity.Specification.Lifetime
     public abstract partial class SpecificationTests
     {
         [TestMethod]
-        [Ignore]
         public async Task ContainerCanBeConfiguredForPerBuildSingletonAsync()
         {
             await Container.RegisterType<IPresenter, MockPresenter>();

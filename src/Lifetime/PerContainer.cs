@@ -50,42 +50,7 @@ namespace Unity.Specification.Lifetime
         }
 
         [TestMethod]
-        public void PerContainer_ReturnsSameTaskAsync()
-        {
-            // Arrange
-            ((IUnityContainer)Container).RegisterFactory<IService>(c => new Service(), FactoryLifetime.PerContainer);
-
-            // Act
-            var value = ((IUnityContainer)Container).Resolve<IService>();
-            var task1 = Container.ResolveAsync<IService>();
-            var task2 = Container.ResolveAsync<IService>();
-
-            // Validate
-            Assert.AreSame(task1, task2);
-            Assert.AreSame(value, task1);
-            Assert.AreSame(value, task2);
-        }
-
-        [TestMethod]
-        public void PerContainer_ReturnsSameTaskAsyncAsync()
-        {
-            // Arrange
-            ((IUnityContainer)Container).RegisterFactory<IService>(c => new Service(), FactoryLifetime.PerContainer);
-
-            // Act
-            var value = Container.ResolveAsync<IService>();
-            var task1 = Container.ResolveAsync<IService>();
-            var task2 = Container.ResolveAsync<IService>();
-
-            // Validate
-            Assert.AreSame(task1, task2);
-            Assert.AreSame(value, task1);
-            Assert.AreSame(value, task2);
-        }
-
-        [TestMethod]
-        [Ignore]
-        public async Task PerContainer_BuiltOnlyOnceAsyncAsync()
+        public void PerContainer_BuiltOnlyOnceAsync()
         {
             // Arrange
             int count = 0;
@@ -94,7 +59,7 @@ namespace Unity.Specification.Lifetime
                 Interlocked.Increment(ref count);
                 return new Service();
             };
-            await Container.RegisterFactory<IService>(factory, FactoryLifetime.PerContainer);
+            ((IUnityContainer)Container).RegisterFactory<IService>(factory, FactoryLifetime.PerContainer);
 
             // Act
             var task = Container.ResolveAsync<IService>();
@@ -102,8 +67,7 @@ namespace Unity.Specification.Lifetime
 
             // Validate
             Assert.AreEqual(1, count);
-            //Assert.IsTrue(task.IsCompleted);
-            //Assert.AreSame(task.Result, value);
+            Assert.AreSame(task, value);
         }
 
 

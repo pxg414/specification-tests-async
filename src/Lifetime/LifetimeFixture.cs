@@ -57,12 +57,11 @@ namespace Unity.Specification.Lifetime
         /// Registering var type twice with SetSingleton method. once with default and second with name.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task CheckRegisterInstanceDoneTwiceAsync()
+        public void CheckRegisterInstanceDoneTwiceAsync()
         {
             var aInstance = new Service();
-            await Container.RegisterInstance<Service>(aInstance);
-            await Container.RegisterInstance<Service>("hello", aInstance);
+            ((IUnityContainer)Container).RegisterInstance<Service>(aInstance);
+            ((IUnityContainer)Container).RegisterInstance<Service>("hello", aInstance);
 
             var obj  = Container.ResolveAsync<Service>();
             var obj1 = Container.ResolveAsync<Service>("hello");
@@ -90,12 +89,11 @@ namespace Unity.Specification.Lifetime
         /// SetSingleton class A. Then register instance of class var twice. once by default second by name.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetSingletonRegisterInstanceTwiceAsync()
+        public void SetSingletonRegisterInstanceTwiceAsync()
         {
             var aInstance = new Service();
-            await Container.RegisterInstance<Service>(aInstance);
-            await Container.RegisterInstance<Service>("hello", aInstance);
+            ((IUnityContainer)Container).RegisterInstance(aInstance)
+                                        .RegisterInstance("hello", aInstance);
 
             var obj = Container.ResolveAsync<Service>();
             var obj1 = Container.ResolveAsync<Service>("hello");
@@ -122,15 +120,14 @@ namespace Unity.Specification.Lifetime
         /// Then SetLifetime once default and then by name.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetSingletonRegisterInstanceTwiceSetLifetimeTwiceAsync()
+        public void SetSingletonRegisterInstanceTwiceSetLifetimeTwiceAsync()
         {
             var aInstance = new Service();
 
-            await Container.RegisterInstance(aInstance);
-            await Container.RegisterInstance("hello", aInstance);
-            await Container.RegisterType<Service>(TypeLifetime.PerContainer);
-            await Container.RegisterType<Service>("hello1", TypeLifetime.PerContainer);
+            ((IUnityContainer)Container).RegisterInstance(aInstance)
+                                        .RegisterInstance("hello", aInstance)
+                                        .RegisterType<Service>(TypeLifetime.PerContainer)
+                                        .RegisterType<Service>("hello1", TypeLifetime.PerContainer);
 
             var obj = Container.ResolveAsync<Service>();
             var obj1 = Container.ResolveAsync<Service>("hello1");
@@ -144,13 +141,12 @@ namespace Unity.Specification.Lifetime
         /// Then SetLifetime once default and then by name.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetSingletonNoNameRegisterInstanceDiffNamesAsync()
+        public void SetSingletonNoNameRegisterInstanceDiffNamesAsync()
         {
             var aInstance = new Service();
-            await Container.RegisterInstance<Service>(aInstance);
-            await Container.RegisterInstance<Service>("hello", aInstance);
-            await Container.RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
+            ((IUnityContainer)Container).RegisterInstance<Service>(aInstance)
+                                        .RegisterInstance<Service>("hello", aInstance)
+                                        .RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
 
             var obj = Container.ResolveAsync<Service>();
             var obj1 = Container.ResolveAsync<Service>("hello");
@@ -166,14 +162,13 @@ namespace Unity.Specification.Lifetime
         /// Then SetLifetime once default and then by name.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetLifetimeNoNameRegisterInstanceDiffNamesAsync()
+        public void SetLifetimeNoNameRegisterInstanceDiffNamesAsync()
         {
             var aInstance = new Service();
-            await Container.RegisterType<Service>(TypeLifetime.PerContainer);
-            await Container.RegisterInstance<Service>(aInstance);
-            await Container.RegisterInstance<Service>("hello", aInstance);
-            await Container.RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
+            ((IUnityContainer)Container).RegisterType<Service>(TypeLifetime.PerContainer)
+                                        .RegisterInstance<Service>(aInstance)
+                                        .RegisterInstance<Service>("hello", aInstance)
+                                        .RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
 
             var obj = Container.ResolveAsync<Service>();
             var obj1 = Container.ResolveAsync<Service>("hello");
@@ -189,14 +184,13 @@ namespace Unity.Specification.Lifetime
         /// Then SetLifetime once default and then by name.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetSingletonWithNameRegisterInstanceDiffNamesAsync()
+        public void SetSingletonWithNameRegisterInstanceDiffNamesAsync()
         {
             var aInstance = new Service();
-            await Container.RegisterType<Service>("set", TypeLifetime.PerContainer);
-            await Container.RegisterInstance<Service>(aInstance);
-            await Container.RegisterInstance<Service>("hello", aInstance);
-            await Container.RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
+            ((IUnityContainer)Container).RegisterType<Service>("set", TypeLifetime.PerContainer)
+                                        .RegisterInstance(aInstance)
+                                        .RegisterInstance("hello", aInstance)
+                                        .RegisterInstance("hi", aInstance, new ExternallyControlledLifetimeManager());
 
             var obj = Container.ResolveAsync<Service>("set");
             var obj1 = Container.ResolveAsync<Service>("hello");
@@ -213,14 +207,13 @@ namespace Unity.Specification.Lifetime
         /// Then SetLifetime once default and then by name.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetLifetimeWithNameRegisterInstanceDiffNamesAsync()
+        public void SetLifetimeWithNameRegisterInstanceDiffNamesAsync()
         {
             var aInstance = new Service();
-            await Container.RegisterType<Service>("set", TypeLifetime.PerContainer);
-            await Container.RegisterInstance<Service>(aInstance);
-            await Container.RegisterInstance<Service>("hello", aInstance);
-            await Container.RegisterInstance<Service>("hi", aInstance, new ExternallyControlledLifetimeManager());
+            ((IUnityContainer)Container).RegisterType<Service>("set", TypeLifetime.PerContainer)
+                                        .RegisterInstance(aInstance)
+                                        .RegisterInstance("hello", aInstance)
+                                        .RegisterInstance("hi", aInstance, new ExternallyControlledLifetimeManager());
 
             var obj = Container.ResolveAsync<Service>("set");
             var obj1 = Container.ResolveAsync<Service>("hello");
@@ -238,16 +231,15 @@ namespace Unity.Specification.Lifetime
         /// Then SetLifetime once default and then by name.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetSingletonClassARegisterInstanceOfAandBWithSameNameAsync()
+        public void SetSingletonClassARegisterInstanceOfAandBWithSameNameAsync()
         {
             var aInstance = new Service();
             var bInstance = new OtherService();
-            await Container.RegisterType<Service>(TypeLifetime.PerContainer);
-            await Container.RegisterInstance<Service>(aInstance);
-            await Container.RegisterInstance<Service>("hello", aInstance);
-            await Container.RegisterInstance<OtherService>("hi", bInstance);
-            await Container.RegisterInstance<OtherService>("hello", bInstance, new ExternallyControlledLifetimeManager());
+            ((IUnityContainer)Container).RegisterType<Service>(TypeLifetime.PerContainer)
+                                        .RegisterInstance(aInstance)
+                                        .RegisterInstance("hello", aInstance)
+                                        .RegisterInstance("hi", bInstance)
+                                        .RegisterInstance("hello", bInstance, new ExternallyControlledLifetimeManager());
 
             var obj = Container.ResolveAsync<Service>();
             var obj1 = Container.ResolveAsync<Service>("hello");
@@ -264,13 +256,12 @@ namespace Unity.Specification.Lifetime
         /// SetSingleton class var with name. then register instance of var twice. Once by name, second by default.       
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetSingletonByNameRegisterInstanceOnitAsync()
+        public void SetSingletonByNameRegisterInstanceOnitAsync()
         {
             var aInstance = new Service();
-            await Container.RegisterType<Service>("SetA", TypeLifetime.PerContainer);
-            await Container.RegisterInstance<Service>(aInstance);
-            await Container.RegisterInstance<Service>("hello", aInstance);
+            ((IUnityContainer)Container).RegisterType<Service>("SetA", TypeLifetime.PerContainer)
+                                        .RegisterInstance<Service>(aInstance)
+                                        .RegisterInstance<Service>("hello", aInstance);
 
             var obj = Container.ResolveAsync<Service>("SetA");
             var obj1 = Container.ResolveAsync<Service>();
@@ -284,10 +275,10 @@ namespace Unity.Specification.Lifetime
         /// Use SetLifetime twice, once with parameter, and without parameter
         /// </summary>
         [TestMethod]
-        public async Task TestSetLifetimeAsync()
+        public void TestSetLifetimeAsync()
         {
-            await Container.RegisterType<Service>(TypeLifetime.PerContainer);
-            await Container.RegisterType<Service>("hello", TypeLifetime.PerContainer);
+            ((IUnityContainer)Container).RegisterType<Service>(TypeLifetime.PerContainer)
+                                        .RegisterType<Service>("hello", TypeLifetime.PerContainer);
 
             var obj = Container.ResolveAsync<Service>();
             var obj1 = Container.ResolveAsync<Service>("hello");
@@ -300,16 +291,15 @@ namespace Unity.Specification.Lifetime
         /// of class A.
         /// </summary>
         [TestMethod]
-        [Ignore]
-        public async Task SetSingletonDefaultNameRegisterInstanceAsync()
+        public void SetSingletonDefaultNameRegisterInstanceAsync()
         {
             var aInstance = new Service();
 
-            await Container.RegisterType(null, typeof(Service), null, TypeLifetime.PerContainer, null);
-            await Container.RegisterType(null, typeof(Service), "SetA", TypeLifetime.PerContainer, null);
-            await Container.RegisterInstance(aInstance);
-            await Container.RegisterInstance("hello", aInstance);
-            await Container.RegisterInstance("hello", aInstance, new ExternallyControlledLifetimeManager());
+            ((IUnityContainer)Container).RegisterType(null, typeof(Service), null, TypeLifetime.PerContainer, null)
+                                        .RegisterType(null, typeof(Service), "SetA", TypeLifetime.PerContainer, null)
+                                        .RegisterInstance(aInstance)
+                                        .RegisterInstance("hello", aInstance)
+                                        .RegisterInstance("hello", aInstance, new ExternallyControlledLifetimeManager());
 
             var obj = Container.ResolveAsync<Service>();
             var obj1 = Container.ResolveAsync<Service>("SetA");
@@ -357,12 +347,11 @@ namespace Unity.Specification.Lifetime
         }
 
         [TestMethod]
-        [Ignore]
-        public async Task TestStringEmptyAsync()
+        public void TestStringEmptyAsync()
         {
-            await Container.RegisterType<Service>(TypeLifetime.PerContainer);
-            await Container.RegisterType<Service>(string.Empty, TypeLifetime.PerContainer);
-            await Container.RegisterType<Service>(null, TypeLifetime.PerContainer);
+            ((IUnityContainer)Container).RegisterType<Service>(TypeLifetime.PerContainer)
+                                        .RegisterType<Service>(string.Empty, TypeLifetime.PerContainer)
+                                        .RegisterType<Service>(null, TypeLifetime.PerContainer);
 
             var a = Container.ResolveAsync<Service>();
             var b = Container.ResolveAsync<Service>(string.Empty);
