@@ -7,6 +7,7 @@ namespace Unity.Specification.Lifetime
 {
     public abstract partial class SpecificationTests
     {
+        [Ignore]
         [TestMethod]
         [ExpectedException(typeof(ResolutionFailedException))]
         public void PerThread_Type_SameThreadAsync()
@@ -19,6 +20,7 @@ namespace Unity.Specification.Lifetime
             Assert.AreSame(a, b);
         }
 
+        [Ignore]
         [TestMethod]
         public void PerThread_Type_DifferentThreadsAsync()
         {
@@ -41,6 +43,7 @@ namespace Unity.Specification.Lifetime
             Assert.IsInstanceOfType(b, typeof(Exception));
         }
 
+        [Ignore]
         [TestMethod]
         [ExpectedException(typeof(ResolutionFailedException))]
         public void PerThread_Factory_SameThreadAsync()
@@ -52,6 +55,7 @@ namespace Unity.Specification.Lifetime
         }
 
         [TestMethod]
+        [Ignore]
         public void PerThread_Factory_DifferentThreadsAsync()
         {
             ((IUnityContainer)Container).RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerThread);
