@@ -7,7 +7,7 @@ namespace Unity.Specification.Resolution.Basics
     public abstract partial class SpecificationTests
     {
         [TestMethod]
-        public async Task UnityContainer()
+        public async Task UnityContainerAsync()
         {
             var iuc  = await Container.ResolveAsync(typeof(IUnityContainer));
             var iuca = await Container.ResolveAsync(typeof(IUnityContainerAsync));
@@ -20,7 +20,7 @@ namespace Unity.Specification.Resolution.Basics
         }
 
         [TestMethod]
-        public async Task CanCreateObject()
+        public async Task CanCreateObjectAsync()
         {
             // Act/Verify
             var instance = await Container.ResolveAsync(typeof(object));
@@ -28,10 +28,11 @@ namespace Unity.Specification.Resolution.Basics
 
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, typeof(object));
+            Assert.AreNotSame(instance, repeated);
         }
 
         [TestMethod]
-        public async Task ContainerResolvesRecursiveConstructorDependencies()
+        public async Task ContainerResolvesRecursiveConstructorDependenciesAsync()
         {
             // Act
             var dep = (ObjectWithOneDependency)await Container.ResolveAsync(typeof(ObjectWithOneDependency));
@@ -43,7 +44,7 @@ namespace Unity.Specification.Resolution.Basics
         }
 
         [TestMethod]
-        public async Task ContainerResolvesMultipleRecursiveConstructorDependencies()
+        public async Task ContainerResolvesMultipleRecursiveConstructorDependenciesAsync()
         {
             // Act
             var dep = (ObjectWithTwoConstructorDependencies)await Container.ResolveAsync(typeof(ObjectWithTwoConstructorDependencies));
@@ -53,15 +54,15 @@ namespace Unity.Specification.Resolution.Basics
         }
 
         [TestMethod]
-        public async Task NamedType()
+        public async Task NamedTypeAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterType<IFoo, Foo>()
                                         .RegisterType<IFoo, Foo1>(Name);
 
             // Act 
-            var instance1 = await Container.ResolveAsync(typeof(IFoo));
             var instance2 = await Container.ResolveAsync(typeof(IFoo), Name);
+            var instance1 = await Container.ResolveAsync(typeof(IFoo));
 
             // Validate
             Assert.IsInstanceOfType(instance1, typeof(Foo));
@@ -69,7 +70,7 @@ namespace Unity.Specification.Resolution.Basics
         }
 
         [TestMethod]
-        public async Task NamedInstance()
+        public async Task NamedInstanceAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterInstance<IFoo>(new Foo())
@@ -81,7 +82,7 @@ namespace Unity.Specification.Resolution.Basics
         }
 
         [TestMethod]
-        public async Task NamedFactory()
+        public async Task NamedFactoryAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterFactory<IFoo>((c, t, n) => new Foo())
@@ -94,7 +95,7 @@ namespace Unity.Specification.Resolution.Basics
 
         [TestMethod]
         [ExpectedException(typeof(ResolutionFailedException))]
-        public async Task NamedTypeNegative()
+        public async Task NamedTypeNegativeAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterType<IFoo, Foo>()
@@ -106,7 +107,7 @@ namespace Unity.Specification.Resolution.Basics
 
         [TestMethod]
         [ExpectedException(typeof(ResolutionFailedException))]
-        public async Task NamedInstanceNegative()
+        public async Task NamedInstanceNegativeAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterInstance<IFoo>(new Foo())
@@ -118,7 +119,7 @@ namespace Unity.Specification.Resolution.Basics
 
         [TestMethod]
         [ExpectedException(typeof(ResolutionFailedException))]
-        public async Task NamedFactoryNegative()
+        public async Task NamedFactoryNegativeAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterFactory<IFoo>((c, t, n) => new Foo())
@@ -130,7 +131,7 @@ namespace Unity.Specification.Resolution.Basics
 
 
         [TestMethod]
-        public async Task NamedFactoryNegativeTry()
+        public async Task NamedFactoryNegativeTryAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterFactory<IFoo>((c, t, n) => new Foo())
@@ -150,7 +151,7 @@ namespace Unity.Specification.Resolution.Basics
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public async Task UserExceptionIsNotWrappad()
+        public async Task UserExceptionIsNotWrappadAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterFactory<IFoo>(c => { throw new System.InvalidOperationException("User error"); });
