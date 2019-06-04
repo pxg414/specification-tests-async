@@ -32,6 +32,30 @@ namespace Unity.Specification.Resolution.Basics
         }
 
         [TestMethod]
+        public void CanCreateObjectConcurently()
+        {
+            var results = new[] 
+            {
+                Container.ResolveAsync(typeof(object)).AsTask(),
+                Container.ResolveAsync(typeof(object)).AsTask(),
+                Container.ResolveAsync(typeof(object)).AsTask()
+            };
+
+            // Act/Verify
+            Task.WhenAll(results);
+
+            Assert.IsNotNull(results[0].Result);
+            Assert.IsNotNull(results[1].Result);
+            Assert.IsNotNull(results[2].Result);
+            Assert.IsInstanceOfType(results[0].Result, typeof(object));
+            Assert.IsInstanceOfType(results[1].Result, typeof(object));
+            Assert.IsInstanceOfType(results[2].Result, typeof(object));
+            Assert.AreNotSame(results[0].Result, results[1].Result);
+            Assert.AreNotSame(results[1].Result, results[2].Result);
+            Assert.AreNotSame(results[0].Result, results[2].Result);
+        }
+
+        [TestMethod]
         public async Task ContainerResolvesRecursiveConstructorDependenciesAsync()
         {
             // Act
@@ -51,6 +75,19 @@ namespace Unity.Specification.Resolution.Basics
 
             // Verify
             dep.Validate();
+        }
+
+        [TestMethod]
+        public async Task TypeAsync()
+        {
+            // Arrange
+            ((IUnityContainer)Container).RegisterType<IFoo, Foo>(Invoke.Constructor());
+
+            // Act 
+            var instance = await Container.ResolveAsync(typeof(IFoo));
+
+            // Validate
+            Assert.IsInstanceOfType(instance, typeof(Foo));
         }
 
         [TestMethod]
@@ -151,7 +188,7 @@ namespace Unity.Specification.Resolution.Basics
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public async Task UserExceptionIsNotWrappadAsync()
+        public void UserExceptionIsNotWrappadAsync()
         {
             // Arrange
             ((IUnityContainer)Container).RegisterFactory<IFoo>(c => { throw new System.InvalidOperationException("User error"); });
@@ -159,5 +196,25 @@ namespace Unity.Specification.Resolution.Basics
             // Act
             Container.ResolveAsync<IFoo>();
         }
+
+
+        [TestMethod]
+        public async Task OverridenRegistrationAsync()
+        {
+            // Arrange
+            ((IUnityContainer)Container).RegisterType<IFoo, Foo>();
+
+            // Act 
+            var fooTask0 = Container.ResolveAsync(typeof(IFoo)).AsTask();
+            var fooTask1 = Container.ResolveAsync(typeof(IFoo)).AsTask();
+            ((IUnityContainer)Container).RegisterType<IFoo, Foo1>();
+            var fooTask2 = Container.ResolveAsync(typeof(IFoo));
+
+            // Validate
+            Assert.IsInstanceOfType(await fooTask0, typeof(Foo));
+            Assert.IsInstanceOfType(await fooTask1, typeof(Foo));
+            Assert.IsInstanceOfType(await fooTask2, typeof(Foo1));
+        }
+
     }
 }

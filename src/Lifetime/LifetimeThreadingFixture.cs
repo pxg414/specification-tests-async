@@ -7,6 +7,7 @@ namespace Unity.Specification.Lifetime
     public abstract partial class SpecificationTests
     {
         [TestMethod]
+        [Ignore]
         public void SameInstanceFromMultipleThreadsAsync()
         {
             ((IUnityContainer)Container).RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerContainer);

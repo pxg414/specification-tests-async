@@ -23,6 +23,7 @@ namespace Unity.Specification.Lifetime
         }
 
         [TestMethod]
+        [Ignore]
         public async Task CheckSingletonWithDependenciesAsync()
         {
             await Container.RegisterType<ObjectWithOneDependency>(TypeLifetime.PerContainer);
