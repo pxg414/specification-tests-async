@@ -27,7 +27,6 @@ namespace Unity.Specification.Lifetime
         }
 
         [TestMethod]
-        [Ignore]
         public async Task ThenChildResolvesTheSameInstanceAsync()
         {
             var child1 = Container.CreateChildContainer();
