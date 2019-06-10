@@ -97,5 +97,37 @@ namespace Unity.Specification.Lifetime
             Assert.AreSame(Container.ResolveAsync<IService>(), 
                 ((IUnityContainer)Container).Resolve<IService>());
         }
+
+
+        [TestMethod]
+        public async Task PerContainer_GenericWithInstances()
+        {
+            ((IUnityContainer)Container).RegisterSingleton(typeof(IFoo<>), typeof(Foo<>));
+
+            var childContainer1 = Container.CreateChildContainer();
+            var childContainer2 = Container.CreateChildContainer();
+
+            ((IUnityContainer)childContainer1).RegisterInstance<IService>(new Service());
+            ((IUnityContainer)childContainer2).RegisterInstance<IService>(new Service());
+
+            var test1 = await childContainer1.ResolveAsync(typeof(IFoo<object>));
+            var test2 = await childContainer2.ResolveAsync(typeof(IFoo<object>));
+
+            Assert.AreSame(test1, test2);
+        }
+
+        [TestMethod]
+        public void PerContainer_GenericSingletons()
+        {
+            ((IUnityContainer)Container).RegisterSingleton(typeof(IFoo<>), typeof(Foo<>));
+
+            var childContainer1 = Container.CreateChildContainer();
+            var childContainer2 = Container.CreateChildContainer();
+
+            var test1 = childContainer1.ResolveAsync<IFoo<object>>();
+            var test2 = childContainer2.ResolveAsync<IFoo<object>>();
+
+            Assert.AreSame(test1, test2);
+        }
     }
 }

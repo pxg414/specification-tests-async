@@ -64,6 +64,21 @@ namespace Unity.Specification.Lifetime
         }
     }
 
+    public interface IFoo<TEntity>
+    {
+        TEntity Value { get; }
+    }
+
+    public class Foo<TEntity> : IFoo<TEntity>
+    {
+        public Foo(TEntity value)
+        {
+            Value = value;
+        }
+
+        public TEntity Value { get; }
+    }
+
     public interface IService { }
 
     public class Service : IService { }
