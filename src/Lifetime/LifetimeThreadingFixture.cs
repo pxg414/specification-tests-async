@@ -7,7 +7,6 @@ namespace Unity.Specification.Lifetime
     public abstract partial class SpecificationTests
     {
         [TestMethod]
-        [Ignore]
         public void SameInstanceFromMultipleThreadsAsync()
         {
             ((IUnityContainer)Container).RegisterFactory<IService>((c, t, n) => new Service(), FactoryLifetime.PerContainer);
@@ -37,7 +36,6 @@ namespace Unity.Specification.Lifetime
             Assert.IsNotNull(result1);
             Assert.AreSame(result1, result2);
         }
-
 
         [TestMethod]
         public void ContainerControlledLifetimeDoesNotLeaveHangingLockIfBuildThrowsExceptionAsync()

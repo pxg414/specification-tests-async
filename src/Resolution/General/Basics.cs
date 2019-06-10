@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Unity.Specification.Resolution.Basics
@@ -31,8 +32,46 @@ namespace Unity.Specification.Resolution.Basics
             Assert.AreNotSame(instance, repeated);
         }
 
+        public void MultipleResolvesCreateConcurently()
+        {
+            var container = GetContainer();
+            container.RegisterInstance<string>("a value");
+
+            const int Threads = 40;
+            var barrier = new System.Threading.Barrier(Threads);
+            var countdown = new CountdownEvent(Threads);
+            var random = new Random();
+            var errors = false;
+
+            for (int i = 0; i < Threads; i++)
+            {
+                Task.Factory.StartNew(
+                    wait =>
+                    {
+                        barrier.SignalAndWait();
+
+                        Task.Delay((int)wait).Wait();
+                        try
+                        {
+                            var result = container.ResolveAsync<ClassWithMultipleConstructorParameters>();
+                        }
+                        catch
+                        {
+                            errors = true;
+                        }
+
+                        countdown.Signal();
+                    },
+                    random.Next(0, 3),
+                    TaskCreationOptions.LongRunning);
+            }
+
+            countdown.Wait();
+            Assert.IsFalse(errors);
+        }
+
         [TestMethod]
-        public void CanCreateObjectConcurently()
+        public void CanWaitAll()
         {
             var results = new[] 
             {
@@ -196,25 +235,5 @@ namespace Unity.Specification.Resolution.Basics
             // Act
             Container.ResolveAsync<IFoo>();
         }
-
-
-        [TestMethod]
-        public async Task OverridenRegistrationAsync()
-        {
-            // Arrange
-            ((IUnityContainer)Container).RegisterType<IFoo, Foo>();
-
-            // Act 
-            var fooTask0 = Container.ResolveAsync(typeof(IFoo)).AsTask();
-            var fooTask1 = Container.ResolveAsync(typeof(IFoo)).AsTask();
-            ((IUnityContainer)Container).RegisterType<IFoo, Foo1>();
-            var fooTask2 = Container.ResolveAsync(typeof(IFoo));
-
-            // Validate
-            Assert.IsInstanceOfType(await fooTask0, typeof(Foo));
-            Assert.IsInstanceOfType(await fooTask1, typeof(Foo));
-            Assert.IsInstanceOfType(await fooTask2, typeof(Foo1));
-        }
-
     }
 }
