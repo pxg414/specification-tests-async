@@ -56,7 +56,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
     public class ClassWithRefMethod
     {
         [InjectionMethod]
-        public void InjectedMethod(ref string outParam)
+        public void InjectedMethod(ref string refParam)
         {
         }
     }

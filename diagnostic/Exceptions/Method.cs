@@ -45,7 +45,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
 
             // Validate
             Assert.IsNotNull(exception.InnerException);
-            Assert.AreEqual(1, exception.InnerException.Data.Count);
+            Assert.AreEqual(4, exception.InnerException.Data.Count);
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace Unity.Specification.Diagnostic.Exceptions
 
             // Validate
             Assert.IsNotNull(exception.InnerException);
-            Assert.AreEqual(1, exception.InnerException.Data.Count);
+            Assert.AreEqual(4, exception.InnerException.Data.Count);
         }
     }
 }
